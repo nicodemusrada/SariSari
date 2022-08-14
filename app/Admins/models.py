@@ -16,7 +16,10 @@ class Admins(models.Model):
         super().save()
 
     def validatePassword(adminName, password) -> bool:
-        admin = Admins.objects.get(admin_name = adminName)
+        try:
+            admin = Admins.objects.get(admin_name = adminName)
+        except Admins.DoesNotExist:
+            return False
         hashedPassword = admin.admin_password.encode('utf-8')
         encodedPassword = password.encode('utf-8')
         if bcrypt.checkpw(encodedPassword, hashedPassword):
